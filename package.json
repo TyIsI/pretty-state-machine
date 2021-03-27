@@ -1,0 +1,33 @@
+{
+  "name": "pretty-state-machine",
+  "version": "0.0.1",
+  "description": "A pretty simple state store for React/Javascript",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tyisi/pretty-state-machine.git"
+  },
+  "keywords": [
+    "store",
+    "state"
+  ],
+  "author": "TyIsI",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tyisi/pretty-state-machine/issues"
+  },
+  "homepage": "https://github.com/tyisi/pretty-state-machine#readme",
+  "dependencies": {
+    "eventemitter2": "^6.4.4"
+  },
+  "devDependencies": {
+    "eslint": "^7.23.0",
+    "eslint-config-standard": "^16.0.2",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.3.1"
+  }
+}
