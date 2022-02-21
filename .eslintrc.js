@@ -4,7 +4,8 @@ module.exports = {
     commonjs: true,
     es2021: true,
     node: true,
-    es2017: true
+    es2017: true,
+    jest: true
   },
   extends: [
     'standard'
