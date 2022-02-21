@@ -4,14 +4,20 @@ module.exports = {
     commonjs: true,
     es2021: true,
     node: true,
-    es2017: true
+    es2017: true,
+    jest: true
   },
   extends: [
     'standard'
   ],
+  parser: '@typescript-eslint/parser',
   parserOptions: {
-    ecmaVersion: 12
+    ecmaVersion: 'latest',
+    sourceType: 'module'
   },
+  plugins: [
+    '@typescript-eslint'
+  ],
   rules: {
   }
 }

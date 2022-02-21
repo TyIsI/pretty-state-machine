@@ -2,9 +2,21 @@
   "name": "pretty-state-machine",
   "version": "0.0.2",
   "description": "A pretty simple state store for React/Javascript",
-  "main": "lib/index.js",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean",
+    "watch": "yarn build -- --watch src",
+    "prepublishOnly": "yarn build",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -25,10 +37,25 @@
     "eventemitter2": "^6.4.4"
   },
   "devDependencies": {
-    "eslint": "^7.23.0",
-    "eslint-config-standard": "^16.0.2",
-    "eslint-plugin-import": "^2.22.1",
+    "@babel/core": "^7.17.5",
+    "@babel/preset-env": "^7.16.11",
+    "@babel/preset-typescript": "^7.16.7",
+    "@types/jest": "^27.4.0",
+    "@typescript-eslint/eslint-plugin": "^5.12.0",
+    "@typescript-eslint/parser": "^5.12.0",
+    "babel-jest": "^27.5.1",
+    "eslint": "^7.32.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-jest": "^26.1.1",
     "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^4.3.1"
+    "eslint-plugin-promise": "^5.2.0",
+    "jest": "^27.5.1",
+    "jest-localstorage-mock": "^2.4.19",
+    "tsup": "^5.11.13",
+    "typescript": "^4.5.5"
+  },
+  "np": {
+    "branch": "trunk"
   }
 }
