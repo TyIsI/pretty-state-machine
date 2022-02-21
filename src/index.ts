@@ -30,15 +30,15 @@ class PrettyStateMachine {
     }
   }
 
-  fetch(topic: string, defaultVal: any) {
+  fetch (topic: string, defaultVal: any) {
     return (this.store[topic] !== undefined) ? { [topic]: this.store[topic] } : (this.store[this.defaultTopic][topic] !== undefined) ? { [topic]: this.store[this.defaultTopic][topic] } : (typeof defaultVal !== 'object') ? { [topic]: defaultVal } : defaultVal || {}
   }
 
-  get(topic: string, defaultVal: any) {
+  get (topic: string, defaultVal: any) {
     return (this.store[topic] !== undefined) ? this.store[topic] : (this.store[this.defaultTopic][topic] !== undefined) ? this.store[this.defaultTopic][topic] : defaultVal || null
   }
 
-  pub(topic: string, args: any) {
+  pub (topic: string, args: any) {
     if (typeof topic !== 'string') {
       args = topic
       topic = this.defaultTopic
@@ -79,11 +79,9 @@ class PrettyStateMachine {
 
       this.consumers.emit(this.defaultTopic, this.store[this.defaultTopic])
     }
-
   }
 
-
-  sub(topic: string | any, handler?: any): EventEmitter2 {
+  sub (topic: string | any, handler?: any): EventEmitter2 {
     if (typeof topic === 'function') {
       handler = topic
       topic = this.defaultTopic
@@ -94,7 +92,7 @@ class PrettyStateMachine {
     return this.consumers.on(topic, handler)
   }
 
-  unsub(topic: string | any, handler?: any) {
+  unsub (topic: string | any, handler?: any) {
     if (typeof topic === 'function') {
       handler = topic
       topic = this.defaultTopic
@@ -104,15 +102,15 @@ class PrettyStateMachine {
     return this.consumers.off(topic, handler)
   }
 
-  attach(topic: string | any, handler?: any) {
+  attach (topic: string | any, handler?: any) {
     return this.sub(topic, handler)
   }
 
-  unattach(topic: string | any, handler?: any) {
+  unattach (topic: string | any, handler?: any) {
     return this.unsub(topic, handler)
   }
 
-  detach(topic: string | any, handler?: any) {
+  detach (topic: string | any, handler?: any) {
     return this.unsub(topic, handler)
   }
 }
