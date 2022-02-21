@@ -25,6 +25,7 @@ var PrettyStateMachine = class {
   consumers;
   defaultTopic;
   store;
+  localStorageKey;
   constructor(name) {
     this.name = name || "default";
     this.debug = debug.extend(this.name);
@@ -32,22 +33,32 @@ var PrettyStateMachine = class {
     this.consumers = new EventEmitter2({ wildcard: false, maxListeners: 100 });
     this.defaultTopic = "state";
     this.store = { [this.defaultTopic]: {} };
-    if (typeof localStorage !== "undefined" && localStorage.getItem("pretty-state-machine") !== null) {
-      debug("pretty-state-machine", "trying to load data from localStorage");
-      try {
-        const store = JSON.parse(localStorage.getItem("pretty-state-machine"));
-        this.store = __spreadValues(__spreadValues({}, store), { [this.defaultTopic]: store });
-        this.debug("pretty-state-machine", "loaded data from localStorage");
-      } catch (err) {
-        this.debug("pretty-state-machine", "failed to load data from localStorage:", err);
+    this.localStorageKey = "pretty-state-machine" + (this.name !== "default" ? ":" + this.name : "");
+    if (typeof localStorage !== "undefined") {
+      if (localStorage.getItem(this.localStorageKey) !== null) {
+        this.debug("trying to load data from localStorage");
+        try {
+          const store = JSON.parse(localStorage.getItem(this.localStorageKey));
+          this.store = __spreadValues(__spreadValues({}, store), { [this.defaultTopic]: store });
+          this.debug("loaded data from localStorage");
+        } catch (err) {
+          this.debug("failed to load data from localStorage:", err);
+        }
       }
+      this.debug("setting up persistence to localStorage for", this.localStorageKey);
+      this.sub((state) => {
+        this.debug("saving to localStorage:", this.localStorageKey, state);
+        localStorage.setItem(this.localStorageKey, JSON.stringify(state));
+      });
     }
+    this.pub("init", "ok");
   }
   fetch(topic, defaultVal) {
-    return this.store[topic] !== void 0 ? { [topic]: this.store[topic] } : this.store[this.defaultTopic][topic] !== void 0 ? { [topic]: this.store[this.defaultTopic][topic] } : typeof defaultVal !== "object" ? { [topic]: defaultVal } : defaultVal || {};
+    defaultVal = defaultVal || {};
+    return this.store[topic] !== void 0 ? { [topic]: this.store[topic] } : typeof defaultVal !== "object" ? { [topic]: defaultVal } : defaultVal[topic] !== void 0 ? defaultVal : { [topic]: {} };
   }
   get(topic, defaultVal) {
-    return this.store[topic] !== void 0 ? this.store[topic] : this.store[this.defaultTopic][topic] !== void 0 ? this.store[this.defaultTopic][topic] : defaultVal || null;
+    return this.store[topic] !== void 0 ? this.store[topic] : this.store[this.defaultTopic][topic] !== void 0 ? this.store[this.defaultTopic][topic] : defaultVal !== void 0 ? defaultVal : null;
   }
   pub(topic, args) {
     if (typeof topic !== "string") {
@@ -56,8 +67,9 @@ var PrettyStateMachine = class {
     }
     let updateObj = {};
     if (Array.isArray(args)) {
-      if (this.store[topic] === void 0)
+      if (this.store[topic] === void 0) {
         this.store[topic] = [];
+      }
       if (JSON.stringify(this.store[topic]) !== JSON.stringify(args)) {
         updateObj = { [topic]: args };
       }
@@ -93,7 +105,12 @@ var PrettyStateMachine = class {
       topic = this.defaultTopic;
     }
     topic = topic || this.defaultTopic;
-    return this.consumers.on(topic, handler);
+    try {
+      return this.consumers.on(topic, handler);
+    } catch (err) {
+      this.debug("failed to subscribe:", err);
+      return null;
+    }
   }
   unsub(topic, handler) {
     if (typeof topic === "function") {
@@ -112,16 +129,11 @@ var PrettyStateMachine = class {
   detach(topic, handler) {
     return this.unsub(topic, handler);
   }
+  shutdown() {
+    this.consumers.removeAllListeners();
+  }
 };
 var stateMachine = new PrettyStateMachine();
-if (typeof localStorage !== "undefined") {
-  stateMachine.debug("pretty-state-machine", "saving to localStorage");
-  stateMachine.sub((store) => {
-    stateMachine.debug("pretty-state-machine", "saved to localStorage");
-    localStorage.setItem("pretty-state-machine", JSON.stringify(store));
-  });
-}
-stateMachine.pub("init", "ok");
 var src_default = stateMachine;
 export {
   PrettyStateMachine,
