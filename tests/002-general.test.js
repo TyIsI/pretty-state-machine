@@ -143,6 +143,14 @@ describe('testing pretty-state-machine class', () => {
     stateMachine.pub({ testArray2: [1, 2, 3, 4] })
   })
 
+  it('delete array', () => {
+    stateMachine.delete('testArray2')
+
+    const result = stateMachine.get('testArray2', 'deleted')
+
+    expect(result).toEqual('deleted')
+  })
+
   // it('', () => {
 
   // })
