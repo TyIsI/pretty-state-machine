@@ -53,6 +53,15 @@ var PrettyStateMachine = class {
     }
     this.pub("init", "ok");
   }
+  delete(topic) {
+    if (this.store[this.defaultTopic][topic] !== void 0) {
+      delete this.store[this.defaultTopic][topic];
+    }
+    if (this.store[topic] !== void 0) {
+      delete this.store[topic];
+    }
+    this.consumers.emit(topic, null);
+  }
   fetch(topic, defaultVal) {
     defaultVal = defaultVal || {};
     return this.store[topic] !== void 0 ? { [topic]: this.store[topic] } : typeof defaultVal !== "object" ? { [topic]: defaultVal } : defaultVal[topic] !== void 0 ? defaultVal : { [topic]: {} };
@@ -131,6 +140,7 @@ var PrettyStateMachine = class {
   }
   shutdown() {
     this.consumers.removeAllListeners();
+    this.pub({ init: "shutdown" });
   }
 };
 var stateMachine = new PrettyStateMachine();

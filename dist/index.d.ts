@@ -16,6 +16,13 @@ declare class PrettyStateMachine {
      */
     constructor(name?: string);
     /**
+     * Delete a state
+     *
+     * @param topic
+     * @returns
+     */
+    delete(topic: string): void;
+    /**
      * Fetch a state as an object
      *
      * @param {string} topic
@@ -38,7 +45,7 @@ declare class PrettyStateMachine {
      * @param {string} topic
      * @param {any} value
      */
-    pub(topic: string, args: any): void;
+    pub(topic: string | any, args?: any): void;
     /**
      * Subscribe to a state
      *
