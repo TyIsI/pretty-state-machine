@@ -49,6 +49,24 @@ class PrettyStateMachine {
   }
 
   /**
+   * Delete a state
+   *
+   * @param topic
+   * @returns
+   */
+  delete (topic: string) {
+    if (this.store[this.defaultTopic][topic] !== undefined) {
+      delete this.store[this.defaultTopic][topic]
+    }
+
+    if (this.store[topic] !== undefined) {
+      delete this.store[topic]
+    }
+
+    this.consumers.emit(topic, null)
+  }
+
+  /**
    * Fetch a state as an object
    *
    * @param {string} topic
@@ -93,7 +111,7 @@ class PrettyStateMachine {
    * @param {string} topic
    * @param {any} value
    */
-  pub (topic: string, args: any) {
+  pub (topic: string | any, args?: any) {
     if (typeof topic !== 'string') {
       args = topic
       topic = this.defaultTopic
@@ -218,6 +236,7 @@ class PrettyStateMachine {
    */
   shutdown () {
     this.consumers.removeAllListeners()
+    this.pub({ init: 'shutdown' })
   }
 }
 
