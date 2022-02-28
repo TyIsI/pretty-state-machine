@@ -103,6 +103,11 @@ Arguments:
 
 Returns: PrettyStateMachine instance
 
+### delete
+
+Arguments:
+* topic: string, the name of the state
+
 ### fetch
 
 Arguments:
