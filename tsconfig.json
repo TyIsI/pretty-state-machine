@@ -6,5 +6,5 @@
         "allowJs": true,
         "strict": false,
         "esModuleInterop": true
-    },
+    }
 }
