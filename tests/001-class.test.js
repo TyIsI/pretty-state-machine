@@ -1,4 +1,4 @@
-const { PrettyStateMachine, stateMachine } = require('../src/index.ts')
+const { PrettyStateMachine } = require('../src/index.ts')
 
 let newInstance
 
