@@ -40,12 +40,19 @@ declare class PrettyStateMachine {
      */
     get(topic: string, defaultVal: any): any;
     /**
-     * Set a state
+     * Public a state
      *
      * @param {string} topic
      * @param {any} value
      */
-    pub(topic: string | any, args?: any): void;
+    pub(topic: string | any, value?: any): {};
+    /**
+     * Set a state
+     *
+     * @param topic
+     * @param value
+     */
+    set(topic: string, value?: any): {};
     /**
      * Subscribe to a state
      *
