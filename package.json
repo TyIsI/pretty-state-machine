@@ -1,6 +1,6 @@
 {
   "name": "pretty-state-machine",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "A pretty simple state store for React/Javascript",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
