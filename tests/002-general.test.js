@@ -150,10 +150,6 @@ describe('testing pretty-state-machine class', () => {
 
     expect(result).toEqual('deleted')
   })
-
-  // it('', () => {
-
-  // })
 })
 
 afterAll(() => {
