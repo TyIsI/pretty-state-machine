@@ -54,7 +54,7 @@ var PrettyStateMachine = class {
     this.pub("init", "ok");
   }
   delete(topic) {
-    if (this.store[this.defaultTopic][topic] !== void 0) {
+    if (this.store[this.defaultTopic][topic] != null) {
       delete this.store[this.defaultTopic][topic];
     }
     if (this.store[topic] !== void 0) {
@@ -69,31 +69,45 @@ var PrettyStateMachine = class {
   get(topic, defaultVal) {
     return this.store[topic] !== void 0 ? this.store[topic] : this.store[this.defaultTopic][topic] !== void 0 ? this.store[this.defaultTopic][topic] : defaultVal !== void 0 ? defaultVal : null;
   }
-  pub(topic, args) {
+  pub(topic, value) {
     if (typeof topic !== "string") {
-      args = topic;
+      value = topic;
+      topic = this.defaultTopic;
+    }
+    const updateObj = this.set(topic, value);
+    if (Object.keys(updateObj).length > 0) {
+      for (const emitKey in updateObj) {
+        this.consumers.emit(emitKey, { [emitKey]: this.store[emitKey] });
+      }
+      this.consumers.emit(this.defaultTopic, this.store[this.defaultTopic]);
+    }
+    return updateObj;
+  }
+  set(topic, value) {
+    if (typeof topic !== "string") {
+      value = topic;
       topic = this.defaultTopic;
     }
     let updateObj = {};
-    if (Array.isArray(args)) {
+    if (Array.isArray(value)) {
       if (this.store[topic] === void 0) {
         this.store[topic] = [];
       }
-      if (JSON.stringify(this.store[topic]) !== JSON.stringify(args)) {
-        updateObj = { [topic]: args };
+      if (JSON.stringify(this.store[topic]) !== JSON.stringify(value)) {
+        updateObj = { [topic]: value };
       }
-    } else if (typeof args === "object") {
+    } else if (typeof value === "object") {
       if (this.store[topic] === void 0)
         this.store[topic] = {};
-      for (const updateKey in args) {
-        if ((this.store[topic][updateKey] === void 0 || JSON.stringify(this.store[topic][updateKey]) !== JSON.stringify(args[updateKey])) && updateKey !== this.defaultTopic) {
-          updateObj[updateKey] = args[updateKey];
+      for (const updateKey in value) {
+        if ((this.store[topic][updateKey] === void 0 || JSON.stringify(this.store[topic][updateKey]) !== JSON.stringify(value[updateKey])) && updateKey !== this.defaultTopic) {
+          updateObj[updateKey] = value[updateKey];
         }
       }
     } else {
-      if (this.store[topic] !== args) {
-        updateObj = { [topic]: args };
-        this.store[topic] = args;
+      if (this.store[topic] !== value) {
+        updateObj = { [topic]: value };
+        this.store[topic] = value;
       }
     }
     if (Object.keys(updateObj).length > 0) {
@@ -103,10 +117,9 @@ var PrettyStateMachine = class {
       }
       for (const emitKey in updateObj) {
         this.store[emitKey] = updateObj[emitKey];
-        this.consumers.emit(emitKey, { [emitKey]: this.store[emitKey] });
       }
-      this.consumers.emit(this.defaultTopic, this.store[this.defaultTopic]);
     }
+    return updateObj;
   }
   sub(topic, handler) {
     if (typeof topic === "function") {
