@@ -1,20 +1,9 @@
-const { PrettyStateMachine, stateMachine } = require('../src/index.ts')
+const { stateMachine } = require('../src/index.ts')
 
 const stateHandler = (data) => { console.log('state', data) }
 const testHandler = (data) => { console.log('test', data) }
 
-let newInstance
-
 describe('testing pretty-state-machine class', () => {
-  it('creates a new instance', () => {
-    newInstance = new PrettyStateMachine()
-  })
-
-  it('destroy the new instance', () => {
-    newInstance.shutdown()
-    newInstance = null
-  })
-
   it('fetch a topic entry with a default value', () => {
     const result = stateMachine.fetch('test', 'default')
 
@@ -87,37 +76,17 @@ describe('testing pretty-state-machine class', () => {
     expect(result).toEqual(stateMachine.consumers)
   })
 
-  it('pub a string', () => {
-    stateMachine.pub('testString', 'test')
-  })
-
-  it('pub a number', () => {
-    stateMachine.pub('testNumber', 1)
-  })
-
-  it('pub a boolean', () => {
-    stateMachine.pub('testBoolean', true)
-  })
-
-  it('pub an object', () => {
-    stateMachine.pub('testObj', { test: 'test' })
-  })
-
-  it('pub an array', () => {
-    stateMachine.pub('testArray', [1, 2, 3])
-  })
-
-  it('pub a new state', () => {
-    stateMachine.pub({ test: 'test' })
-  })
-
   it('fetch a topic entry with an existing value', () => {
+    stateMachine.set('test', 'test')
+
     const result = stateMachine.fetch('test', 'default')
 
     expect(result).toEqual({ test: 'test' })
   })
 
   it('get a topic entry with an existing value', () => {
+    stateMachine.set('test', 'test')
+
     const result = stateMachine.get('test', 'default')
 
     expect(result).toEqual('test')
@@ -144,6 +113,10 @@ describe('testing pretty-state-machine class', () => {
   })
 
   it('delete array', () => {
+    const setResult = stateMachine.set('testArray2', [false, true])
+
+    expect(setResult).toEqual({ testArray2: [false, true] })
+
     stateMachine.delete('testArray2')
 
     const result = stateMachine.get('testArray2', 'deleted')

@@ -10,7 +10,6 @@ describe('testing pretty-state-machine class', () => {
   it('destroy the new instance', () => {
     newInstance.shutdown()
     newInstance = null
-    stateMachine.shutdown()
   })
 
   it('test faulty localStore', () => {
@@ -21,7 +20,6 @@ describe('testing pretty-state-machine class', () => {
   it('destroy the new instance', () => {
     newInstance.shutdown()
     newInstance = null
-    stateMachine.shutdown()
   })
 
   it('test missing localStore', () => {
@@ -32,6 +30,5 @@ describe('testing pretty-state-machine class', () => {
   it('destroy the new instance', () => {
     newInstance.shutdown()
     newInstance = null
-    stateMachine.shutdown()
   })
 })
