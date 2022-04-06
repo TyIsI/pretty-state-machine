@@ -48,7 +48,7 @@ __export(src_exports, {
   prettyStateMachine: () => stateMachine,
   stateMachine: () => stateMachine
 });
-var import_eventemitter2 = require("eventemitter2");
+var import_eventemitter3 = __toESM(require("eventemitter3"));
 var import_debug = __toESM(require("debug"));
 var debug = (0, import_debug.default)("pretty-state-machine");
 var PrettyStateMachine = class {
@@ -62,7 +62,7 @@ var PrettyStateMachine = class {
     this.name = name || "default";
     this.debug = debug.extend(this.name);
     this.debug("starting");
-    this.consumers = new import_eventemitter2.EventEmitter2({ wildcard: false, maxListeners: 100 });
+    this.consumers = new import_eventemitter3.default();
     this.defaultTopic = "state";
     this.store = { [this.defaultTopic]: {} };
     this.localStorageKey = "pretty-state-machine" + (this.name !== "default" ? ":" + this.name : "");

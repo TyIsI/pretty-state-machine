@@ -1,11 +1,12 @@
-import { EventEmitter2 } from 'eventemitter2'
+import EventEmitter from 'eventemitter3'
 import Debug from 'debug'
+
 const debug = Debug('pretty-state-machine')
 
 class PrettyStateMachine {
   name: string
   debug: any
-  consumers: any
+  consumers: EventEmitter
   defaultTopic: string
   store: { [k: string]: {} }
   localStorageKey: string
@@ -19,7 +20,7 @@ class PrettyStateMachine {
     this.name = name || 'default'
     this.debug = debug.extend(this.name)
     this.debug('starting')
-    this.consumers = new EventEmitter2({ wildcard: false, maxListeners: 100 })
+    this.consumers = new EventEmitter()
     this.defaultTopic = 'state'
     this.store = { [this.defaultTopic]: {} }
 
@@ -193,9 +194,9 @@ class PrettyStateMachine {
    *
    * @param topic
    * @param handler
-   * @returns {EventEmitter2}
+   * @returns {EventEmitter}
    */
-  sub (topic: string | any, handler?: any): EventEmitter2 {
+  sub (topic: string | any, handler?: any): EventEmitter {
     if (typeof topic === 'function') {
       handler = topic
       topic = this.defaultTopic

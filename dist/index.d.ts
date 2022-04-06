@@ -1,9 +1,9 @@
-import { EventEmitter2 } from 'eventemitter2';
+import EventEmitter from 'eventemitter3';
 
 declare class PrettyStateMachine {
     name: string;
     debug: any;
-    consumers: any;
+    consumers: EventEmitter;
     defaultTopic: string;
     store: {
         [k: string]: {};
@@ -58,9 +58,9 @@ declare class PrettyStateMachine {
      *
      * @param topic
      * @param handler
-     * @returns {EventEmitter2}
+     * @returns {EventEmitter}
      */
-    sub(topic: string | any, handler?: any): EventEmitter2;
+    sub(topic: string | any, handler?: any): EventEmitter;
     /**
      * Unsubscribe from a state
      *
@@ -68,7 +68,7 @@ declare class PrettyStateMachine {
      * @param handler
      * @returns
      */
-    unsub(topic: string | any, handler?: any): any;
+    unsub(topic: string | any, handler?: any): EventEmitter<string | symbol, any>;
     /**
      * Alias for sub
      *
@@ -76,7 +76,7 @@ declare class PrettyStateMachine {
      * @param handler
      * @returns
      */
-    attach(topic: string | any, handler?: any): EventEmitter2;
+    attach(topic: string | any, handler?: any): EventEmitter<string | symbol, any>;
     /**
      * Alias for unsub
      *
@@ -84,7 +84,7 @@ declare class PrettyStateMachine {
      * @param handler
      * @returns
      */
-    unattach(topic: string | any, handler?: any): any;
+    unattach(topic: string | any, handler?: any): EventEmitter<string | symbol, any>;
     /**
      * Alias for unsub
      *
@@ -92,7 +92,7 @@ declare class PrettyStateMachine {
      * @param handler
      * @returns
      */
-    detach(topic: string | any, handler?: any): any;
+    detach(topic: string | any, handler?: any): EventEmitter<string | symbol, any>;
     /**
      * Shutdown the state machine
      */

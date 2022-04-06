@@ -16,7 +16,7 @@ var __spreadValues = (a, b) => {
 };
 
 // src/index.ts
-import { EventEmitter2 } from "eventemitter2";
+import EventEmitter from "eventemitter3";
 import Debug from "debug";
 var debug = Debug("pretty-state-machine");
 var PrettyStateMachine = class {
@@ -30,7 +30,7 @@ var PrettyStateMachine = class {
     this.name = name || "default";
     this.debug = debug.extend(this.name);
     this.debug("starting");
-    this.consumers = new EventEmitter2({ wildcard: false, maxListeners: 100 });
+    this.consumers = new EventEmitter();
     this.defaultTopic = "state";
     this.store = { [this.defaultTopic]: {} };
     this.localStorageKey = "pretty-state-machine" + (this.name !== "default" ? ":" + this.name : "");
