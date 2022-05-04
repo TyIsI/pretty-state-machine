@@ -33,6 +33,7 @@
   },
   "homepage": "https://github.com/tyisi/pretty-state-machine#readme",
   "dependencies": {
+    "copy-anything": "^3.0.2",
     "debug": "^4.3.2",
     "eventemitter3": "^4.0.7"
   },

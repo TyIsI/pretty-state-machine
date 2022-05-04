@@ -1,5 +1,6 @@
 import EventEmitter from 'eventemitter3'
 import Debug from 'debug'
+import { copy } from 'copy-anything'
 
 const debug = Debug('pretty-state-machine')
 
@@ -84,13 +85,7 @@ class PrettyStateMachine {
 
     /* TODO: fix test */
     /* istanbul ignore next */
-    return (this.store[topic] !== undefined)
-      ? { [topic]: this.store[topic] }
-      : (typeof defaultVal !== 'object')
-          ? { [topic]: defaultVal }
-          : defaultVal[topic] !== undefined
-            ? defaultVal
-            : { [topic]: {} }
+    return (this.store[topic] !== undefined) ? copy({ [topic]: this.store[topic] }) : (typeof defaultVal !== 'object') ? copy({ [topic]: copy(defaultVal) }) : defaultVal[topic] !== undefined ? copy(defaultVal) : { [topic]: {} }
   }
 
   /**
@@ -103,13 +98,7 @@ class PrettyStateMachine {
   get (topic: string, defaultVal: any) {
     /* TODO: fix test */
     /* istanbul ignore next */
-    return (this.store[topic] !== undefined)
-      ? this.store[topic]
-      : (this.store[this.defaultTopic][topic] !== undefined)
-          ? this.store[this.defaultTopic][topic]
-          : defaultVal !== undefined
-            ? defaultVal
-            : null
+    return (this.store[topic] !== undefined) ? copy(this.store[topic]) : (this.store[this.defaultTopic][topic] !== undefined) ? copy(this.store[this.defaultTopic][topic]) : defaultVal !== undefined ? copy(defaultVal) : null
   }
 
   /**
@@ -166,7 +155,7 @@ class PrettyStateMachine {
 
       for (const updateKey in value) {
         if ((this.store[topic][updateKey] === undefined || JSON.stringify(this.store[topic][updateKey]) !== JSON.stringify(value[updateKey])) && updateKey !== this.defaultTopic) {
-          updateObj[updateKey] = value[updateKey]
+          updateObj[updateKey] = copy(value[updateKey])
         }
       }
     } else {

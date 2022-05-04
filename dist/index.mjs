@@ -18,6 +18,7 @@ var __spreadValues = (a, b) => {
 // src/index.ts
 import EventEmitter from "eventemitter3";
 import Debug from "debug";
+import { copy } from "copy-anything";
 var debug = Debug("pretty-state-machine");
 var PrettyStateMachine = class {
   name;
@@ -64,10 +65,10 @@ var PrettyStateMachine = class {
   }
   fetch(topic, defaultVal) {
     defaultVal = defaultVal || {};
-    return this.store[topic] !== void 0 ? { [topic]: this.store[topic] } : typeof defaultVal !== "object" ? { [topic]: defaultVal } : defaultVal[topic] !== void 0 ? defaultVal : { [topic]: {} };
+    return this.store[topic] !== void 0 ? copy({ [topic]: this.store[topic] }) : typeof defaultVal !== "object" ? copy({ [topic]: copy(defaultVal) }) : defaultVal[topic] !== void 0 ? copy(defaultVal) : { [topic]: {} };
   }
   get(topic, defaultVal) {
-    return this.store[topic] !== void 0 ? this.store[topic] : this.store[this.defaultTopic][topic] !== void 0 ? this.store[this.defaultTopic][topic] : defaultVal !== void 0 ? defaultVal : null;
+    return this.store[topic] !== void 0 ? copy(this.store[topic]) : this.store[this.defaultTopic][topic] !== void 0 ? copy(this.store[this.defaultTopic][topic]) : defaultVal !== void 0 ? copy(defaultVal) : null;
   }
   pub(topic, value) {
     if (typeof topic !== "string") {
@@ -101,7 +102,7 @@ var PrettyStateMachine = class {
         this.store[topic] = {};
       for (const updateKey in value) {
         if ((this.store[topic][updateKey] === void 0 || JSON.stringify(this.store[topic][updateKey]) !== JSON.stringify(value[updateKey])) && updateKey !== this.defaultTopic) {
-          updateObj[updateKey] = value[updateKey];
+          updateObj[updateKey] = copy(value[updateKey]);
         }
       }
     } else {

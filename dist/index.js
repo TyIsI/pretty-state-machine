@@ -50,6 +50,7 @@ __export(src_exports, {
 });
 var import_eventemitter3 = __toESM(require("eventemitter3"));
 var import_debug = __toESM(require("debug"));
+var import_copy_anything = require("copy-anything");
 var debug = (0, import_debug.default)("pretty-state-machine");
 var PrettyStateMachine = class {
   name;
@@ -96,10 +97,10 @@ var PrettyStateMachine = class {
   }
   fetch(topic, defaultVal) {
     defaultVal = defaultVal || {};
-    return this.store[topic] !== void 0 ? { [topic]: this.store[topic] } : typeof defaultVal !== "object" ? { [topic]: defaultVal } : defaultVal[topic] !== void 0 ? defaultVal : { [topic]: {} };
+    return this.store[topic] !== void 0 ? (0, import_copy_anything.copy)({ [topic]: this.store[topic] }) : typeof defaultVal !== "object" ? (0, import_copy_anything.copy)({ [topic]: (0, import_copy_anything.copy)(defaultVal) }) : defaultVal[topic] !== void 0 ? (0, import_copy_anything.copy)(defaultVal) : { [topic]: {} };
   }
   get(topic, defaultVal) {
-    return this.store[topic] !== void 0 ? this.store[topic] : this.store[this.defaultTopic][topic] !== void 0 ? this.store[this.defaultTopic][topic] : defaultVal !== void 0 ? defaultVal : null;
+    return this.store[topic] !== void 0 ? (0, import_copy_anything.copy)(this.store[topic]) : this.store[this.defaultTopic][topic] !== void 0 ? (0, import_copy_anything.copy)(this.store[this.defaultTopic][topic]) : defaultVal !== void 0 ? (0, import_copy_anything.copy)(defaultVal) : null;
   }
   pub(topic, value) {
     if (typeof topic !== "string") {
@@ -133,7 +134,7 @@ var PrettyStateMachine = class {
         this.store[topic] = {};
       for (const updateKey in value) {
         if ((this.store[topic][updateKey] === void 0 || JSON.stringify(this.store[topic][updateKey]) !== JSON.stringify(value[updateKey])) && updateKey !== this.defaultTopic) {
-          updateObj[updateKey] = value[updateKey];
+          updateObj[updateKey] = (0, import_copy_anything.copy)(value[updateKey]);
         }
       }
     } else {
