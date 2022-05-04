@@ -117,3 +117,4 @@ out
 .yarn/install-state.gz
 .pnp.*
 tmp
+.vscode
