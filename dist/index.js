@@ -90,17 +90,17 @@ var PrettyStateMachine = class {
     if (this.store[this.defaultTopic][topic] != null) {
       delete this.store[this.defaultTopic][topic];
     }
-    if (this.store[topic] !== void 0) {
+    if (this.store[topic] != null) {
       delete this.store[topic];
     }
     this.consumers.emit(topic, null);
   }
   fetch(topic, defaultVal) {
     defaultVal = defaultVal || {};
-    return this.store[topic] !== void 0 ? (0, import_copy_anything.copy)({ [topic]: this.store[topic] }) : typeof defaultVal !== "object" ? (0, import_copy_anything.copy)({ [topic]: (0, import_copy_anything.copy)(defaultVal) }) : defaultVal[topic] !== void 0 ? (0, import_copy_anything.copy)(defaultVal) : { [topic]: {} };
+    return this.store[topic] != null ? (0, import_copy_anything.copy)({ [topic]: this.store[topic] }) : typeof defaultVal !== "object" ? (0, import_copy_anything.copy)({ [topic]: (0, import_copy_anything.copy)(defaultVal) }) : defaultVal[topic] != null ? (0, import_copy_anything.copy)(defaultVal) : { [topic]: {} };
   }
   get(topic, defaultVal) {
-    return this.store[topic] !== void 0 ? (0, import_copy_anything.copy)(this.store[topic]) : this.store[this.defaultTopic][topic] !== void 0 ? (0, import_copy_anything.copy)(this.store[this.defaultTopic][topic]) : defaultVal !== void 0 ? (0, import_copy_anything.copy)(defaultVal) : null;
+    return this.store[topic] != null ? (0, import_copy_anything.copy)(this.store[topic]) : this.store[this.defaultTopic][topic] != null ? (0, import_copy_anything.copy)(this.store[this.defaultTopic][topic]) : defaultVal != null ? (0, import_copy_anything.copy)(defaultVal) : null;
   }
   pub(topic, value) {
     if (typeof topic !== "string") {
@@ -123,24 +123,23 @@ var PrettyStateMachine = class {
     }
     let updateObj = {};
     if (Array.isArray(value)) {
-      if (this.store[topic] === void 0) {
+      if (this.store[topic] == null) {
         this.store[topic] = [];
       }
       if (JSON.stringify(this.store[topic]) !== JSON.stringify(value)) {
         updateObj = { [topic]: value };
       }
-    } else if (typeof value === "object") {
-      if (this.store[topic] === void 0)
+    } else if (typeof value === "object" && value != null) {
+      if (this.store[topic] == null)
         this.store[topic] = {};
       for (const updateKey in value) {
-        if ((this.store[topic][updateKey] === void 0 || JSON.stringify(this.store[topic][updateKey]) !== JSON.stringify(value[updateKey])) && updateKey !== this.defaultTopic) {
+        if ((this.store[topic][updateKey] == null || JSON.stringify(this.store[topic][updateKey]) !== JSON.stringify(value[updateKey])) && updateKey !== this.defaultTopic) {
           updateObj[updateKey] = (0, import_copy_anything.copy)(value[updateKey]);
         }
       }
     } else {
       if (this.store[topic] !== value) {
         updateObj = { [topic]: value };
-        this.store[topic] = value;
       }
     }
     if (Object.keys(updateObj).length > 0) {
