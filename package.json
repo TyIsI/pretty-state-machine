@@ -23,6 +23,7 @@
     "prebuild": "yarn test",
     "prepublishOnly": "yarn build",
     "prerelease": "yarn build",
+    "postrelease": "git push --follow-tags origin trunk && npm publish",
     "pretest": "yarn lint"
   },
   "repository": {
