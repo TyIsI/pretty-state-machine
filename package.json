@@ -15,10 +15,15 @@
   "scripts": {
     "build": "tsup src/index.ts --format cjs,esm --dts --clean",
     "watch": "yarn build -- --watch src",
-    "prepublishOnly": "yarn build",
+    "lint": "eslint --fix src/** tests/**",
     "test": "jest",
     "commit": "npx git-cz",
-    "release": "standard-version"
+    "release": "standard-version",
+    "postbuild": "git add dist && git commit -m \"chore: dist build\" || true",
+    "prebuild": "yarn test",
+    "prepublishOnly": "yarn build",
+    "prerelease": "yarn build",
+    "pretest": "yarn lint"
   },
   "repository": {
     "type": "git",
