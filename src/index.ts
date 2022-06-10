@@ -65,7 +65,7 @@ class PrettyStateMachine {
 
     /* TODO: fix test */
     /* istanbul ignore next */
-    if (this.store[topic] !== undefined) {
+    if (this.store[topic] != null) {
       delete this.store[topic]
     }
 
@@ -85,7 +85,7 @@ class PrettyStateMachine {
 
     /* TODO: fix test */
     /* istanbul ignore next */
-    return (this.store[topic] !== undefined) ? copy({ [topic]: this.store[topic] }) : (typeof defaultVal !== 'object') ? copy({ [topic]: copy(defaultVal) }) : defaultVal[topic] !== undefined ? copy(defaultVal) : { [topic]: {} }
+    return (this.store[topic] != null) ? copy({ [topic]: this.store[topic] }) : (typeof defaultVal !== 'object') ? copy({ [topic]: copy(defaultVal) }) : defaultVal[topic] != null ? copy(defaultVal) : { [topic]: {} }
   }
 
   /**
@@ -98,7 +98,7 @@ class PrettyStateMachine {
   get (topic: string, defaultVal: any) {
     /* TODO: fix test */
     /* istanbul ignore next */
-    return (this.store[topic] !== undefined) ? copy(this.store[topic]) : (this.store[this.defaultTopic][topic] !== undefined) ? copy(this.store[this.defaultTopic][topic]) : defaultVal !== undefined ? copy(defaultVal) : null
+    return (this.store[topic] != null) ? copy(this.store[topic]) : (this.store[this.defaultTopic][topic] != null) ? copy(this.store[this.defaultTopic][topic]) : defaultVal != null ? copy(defaultVal) : null
   }
 
   /**
@@ -141,7 +141,7 @@ class PrettyStateMachine {
     let updateObj = {}
 
     if (Array.isArray(value)) {
-      if (this.store[topic] === undefined) {
+      if (this.store[topic] == null) {
         this.store[topic] = []
       }
 
@@ -150,18 +150,17 @@ class PrettyStateMachine {
       if (JSON.stringify(this.store[topic]) !== JSON.stringify(value)) {
         updateObj = { [topic]: value }
       }
-    } else if (typeof value === 'object') {
-      if (this.store[topic] === undefined) this.store[topic] = {}
+    } else if (typeof value === 'object' && value != null) {
+      if (this.store[topic] == null) this.store[topic] = {}
 
       for (const updateKey in value) {
-        if ((this.store[topic][updateKey] === undefined || JSON.stringify(this.store[topic][updateKey]) !== JSON.stringify(value[updateKey])) && updateKey !== this.defaultTopic) {
+        if ((this.store[topic][updateKey] == null || JSON.stringify(this.store[topic][updateKey]) !== JSON.stringify(value[updateKey])) && updateKey !== this.defaultTopic) {
           updateObj[updateKey] = copy(value[updateKey])
         }
       }
     } else {
       if (this.store[topic] !== value) {
         updateObj = { [topic]: value }
-        this.store[topic] = value
       }
     }
 

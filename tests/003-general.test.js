@@ -28,6 +28,12 @@ describe('testing pretty-state-machine class', () => {
     expect(result).toEqual(null)
   })
 
+  it('get a topic entry with a default value but stored value is null', () => {
+    const getResult = stateMachine.get('test', ['default'])
+
+    expect(getResult).toEqual(['default'])
+  })
+
   it('sub to the default topic', () => {
     const result = stateMachine.sub(stateHandler)
 
