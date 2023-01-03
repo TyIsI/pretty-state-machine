@@ -38,7 +38,7 @@ declare class PrettyStateMachine {
      *
      * @returns {object}
      */
-    fetch(topic: psmType, defaultVal?: psmObject): psmObject;
+    fetch(topic: psmType, defaultVal?: psmObject | psmType): psmObject;
     /**
      * Get a state as a value
      *
