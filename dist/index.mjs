@@ -16,9 +16,9 @@ var __spreadValues = (a, b) => {
 };
 
 // src/index.ts
-import EventEmitter from "eventemitter3";
-import Debug from "debug";
 import { copy } from "copy-anything";
+import Debug from "debug";
+import EventEmitter from "eventemitter3";
 var debug = Debug("pretty-state-machine");
 var PrettyStateMachine = class {
   name;
@@ -27,14 +27,18 @@ var PrettyStateMachine = class {
   defaultTopic;
   store;
   localStorageKey;
+  throwErrors = false;
   constructor(name) {
     this.name = name || "default";
     this.debug = debug.extend(this.name);
     this.debug("starting");
     this.consumers = new EventEmitter();
     this.defaultTopic = "state";
-    this.store = { [this.defaultTopic]: {} };
-    this.localStorageKey = "pretty-state-machine" + (this.name !== "default" ? ":" + this.name : "");
+    this.store = { [this.defaultTopic]: this.store };
+    this.localStorageKey = "pretty-state-machine";
+    if (this.name !== "default")
+      this.localStorageKey += `:${this.name}`;
+    this.debug("localStorageKey:", this.localStorageKey);
     if (typeof localStorage !== "undefined") {
       if (localStorage.getItem(this.localStorageKey) !== null) {
         this.debug("trying to load data from localStorage");
@@ -65,10 +69,34 @@ var PrettyStateMachine = class {
   }
   fetch(topic, defaultVal) {
     defaultVal = defaultVal || {};
-    return this.store[topic] != null ? copy({ [topic]: this.store[topic] }) : typeof defaultVal !== "object" ? copy({ [topic]: copy(defaultVal) }) : defaultVal[topic] != null ? copy(defaultVal) : { [topic]: {} };
+    if (this.store[topic] != null) {
+      return copy({ [topic]: this.store[topic] });
+    } else {
+      if (typeof defaultVal !== "object") {
+        return copy({ [topic]: copy(defaultVal) });
+      } else {
+        if (defaultVal[topic] != null) {
+          return copy(defaultVal);
+        } else {
+          return { [topic]: {} };
+        }
+      }
+    }
   }
   get(topic, defaultVal) {
-    return this.store[topic] != null ? copy(this.store[topic]) : this.store[this.defaultTopic][topic] != null ? copy(this.store[this.defaultTopic][topic]) : defaultVal != null ? copy(defaultVal) : null;
+    if (this.store[topic] != null) {
+      return copy(this.store[topic]);
+    } else {
+      if (this.store[this.defaultTopic][topic] != null) {
+        return copy(this.store[this.defaultTopic][topic]);
+      } else {
+        if (defaultVal != null) {
+          return copy(defaultVal);
+        } else {
+          return null;
+        }
+      }
+    }
   }
   pub(topic, value) {
     if (typeof topic !== "string") {
@@ -91,7 +119,7 @@ var PrettyStateMachine = class {
     }
     let updateObj = {};
     if (Array.isArray(value)) {
-      if (this.store[topic] == null) {
+      if (topic != null && this.store[topic] == null) {
         this.store[topic] = [];
       }
       if (JSON.stringify(this.store[topic]) !== JSON.stringify(value)) {
@@ -131,7 +159,10 @@ var PrettyStateMachine = class {
       return this.consumers.on(topic, handler);
     } catch (err) {
       this.debug("failed to subscribe:", err);
-      return null;
+      if (this.throwErrors)
+        throw new Error(`Failed to subscribe to topic ${topic}: ${err.message}`);
+      else
+        return null;
     }
   }
   unsub(topic, handler) {

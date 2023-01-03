@@ -1,14 +1,21 @@
-import EventEmitter from 'eventemitter3';
+import { Debugger } from 'debug';
+import EventEmitter, { EventNames, EventListener } from 'eventemitter3';
+
+declare type psmType = EventNames<string | symbol>;
+declare type psmHandler<T extends psmType> = EventListener<string | symbol, T>;
+declare type psmObject = Record<psmType, unknown>;
+interface psmStoreObject {
+    [key: psmType]: unknown | psmObject;
+}
 
 declare class PrettyStateMachine {
     name: string;
-    debug: any;
+    debug: Debugger;
     consumers: EventEmitter;
-    defaultTopic: string;
-    store: {
-        [k: string]: {};
-    };
+    defaultTopic: psmType;
+    store: psmStoreObject;
     localStorageKey: string;
+    throwErrors: boolean;
     /**
      * Constructor
      *
@@ -18,81 +25,83 @@ declare class PrettyStateMachine {
     /**
      * Delete a state
      *
-     * @param topic
-     * @returns
+     * @param {psmType} topic
+     *
+     * @returns {void}
      */
-    delete(topic: string): void;
+    delete(topic: psmType): void;
     /**
      * Fetch a state as an object
      *
-     * @param {string} topic
-     * @param {any} defaultVal
+     * @param {psmType} topic
+     * @param {V} defaultVal
      *
      * @returns {object}
      */
-    fetch(topic: string, defaultVal: any): any;
+    fetch(topic: psmType, defaultVal?: psmObject): psmObject;
     /**
      * Get a state as a value
      *
-     * @param topic
+     * @param {psmType} topic
      * @param defaultVal
-     * @returns
+     *
+     * @returns {V}
      */
-    get(topic: string, defaultVal: any): any;
+    get<V>(topic: psmType, defaultVal?: V): V;
     /**
      * Public a state
      *
      * @param {string} topic
-     * @param {any} value
+     * @param {unknown} value
      */
-    pub(topic: string | any, value?: any): {};
+    pub<V>(topic: psmType | V, value?: V): psmObject;
     /**
      * Set a state
      *
-     * @param topic
+     * @param {psmType} topic
      * @param value
      */
-    set(topic: string, value?: any): {};
+    set<V>(topic: psmType | V, value?: V): psmObject;
     /**
      * Subscribe to a state
      *
-     * @param topic
+     * @param {psmType} topic
      * @param handler
      * @returns {EventEmitter}
      */
-    sub(topic: string | any, handler?: any): EventEmitter;
+    sub<F extends psmHandler<psmType>>(topic: psmType | F, handler?: F): EventEmitter;
     /**
      * Unsubscribe from a state
      *
-     * @param topic
+     * @param {psmType} topic
      * @param handler
      * @returns
      */
-    unsub(topic: string | any, handler?: any): EventEmitter<string | symbol, any>;
+    unsub<F extends psmHandler<psmType>>(topic: psmType | F, handler?: F): EventEmitter;
     /**
      * Alias for sub
      *
-     * @param topic
+     * @param {psmType} topic
      * @param handler
      * @returns
      */
-    attach(topic: string | any, handler?: any): EventEmitter<string | symbol, any>;
+    attach<F extends psmHandler<psmType>>(topic: psmType | F, handler?: F): EventEmitter;
     /**
      * Alias for unsub
      *
-     * @param topic
+     * @param {psmType} topic
      * @param handler
      * @returns
      */
-    unattach(topic: string | any, handler?: any): EventEmitter<string | symbol, any>;
+    unattach<F extends psmHandler<psmType>>(topic: psmType | F, handler?: F): EventEmitter;
     /**
      * Alias for unsub
      *
-     * @param topic
+     * @param {psmType} topic
      * @param handler
      * @returns
      */
-    detach(topic: string | any, handler?: any): EventEmitter<string | symbol, any>;
+    detach<F extends psmHandler<psmType>>(topic: psmType | F, handler?: F): EventEmitter;
     /**
      * Shutdown the state machine
      */
