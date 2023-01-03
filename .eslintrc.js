@@ -8,6 +8,8 @@ module.exports = {
     jest: true
   },
   extends: [
+    'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
     'standard'
   ],
   parser: '@typescript-eslint/parser',
@@ -18,6 +20,6 @@ module.exports = {
   plugins: [
     '@typescript-eslint'
   ],
-  rules: {
-  }
+  rules: {},
+  root: true
 }
