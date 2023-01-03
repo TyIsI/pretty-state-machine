@@ -1,6 +1,6 @@
-const { PrettyStateMachine } = require('../src/index.ts')
+import { PrettyStateMachine } from '../src'
 
-let newInstance
+let newInstance: PrettyStateMachine
 
 describe('testing pretty-state-machine class', () => {
   it('creates a new instance', () => {

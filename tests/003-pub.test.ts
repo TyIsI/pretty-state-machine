@@ -1,4 +1,4 @@
-const { stateMachine } = require('../src/index.ts')
+import { stateMachine } from '../src'
 
 describe('testing pretty-state-machine pub methods', () => {
   it('pub a string', () => {

@@ -1,7 +1,7 @@
-const { stateMachine } = require('../src/index.ts')
+import { stateMachine } from '../src'
 
-const stateHandler = (data) => { console.log('state', data) }
-const testHandler = (data) => { console.log('test', data) }
+const stateHandler = (data: unknown) => { console.log('state', data) }
+const testHandler = (data: unknown) => { console.log('test', data) }
 
 describe('testing pretty-state-machine class', () => {
   it('fetch a topic entry with a default value', () => {
@@ -16,6 +16,18 @@ describe('testing pretty-state-machine class', () => {
     expect(result).toEqual({ test: {} })
   })
 
+  it('fetch a topic entry with a default value that doesn\'t exist in store', () => {
+    const result = stateMachine.fetch('test1', { test1: 'test1' })
+
+    expect(result).toEqual({ test1: 'test1' })
+  })
+
+  it('fetch a topic entry with a default value that doesn\'t exist in store with a mismatching default value', () => {
+    const result = stateMachine.fetch('test2', { test: 'test' })
+
+    expect(result).toEqual({ test2: {} })
+  })
+
   it('get a topic entry with a default value', () => {
     const result = stateMachine.get('test', 'default')
 
@@ -23,7 +35,7 @@ describe('testing pretty-state-machine class', () => {
   })
 
   it('get a topic entry without a default value', () => {
-    const result = stateMachine.get('test')
+    const result = stateMachine.get<string>('test')
 
     expect(result).toEqual(null)
   })
@@ -50,6 +62,16 @@ describe('testing pretty-state-machine class', () => {
     const result = stateMachine.sub('test')
 
     expect(result).toEqual(null)
+  })
+
+  it('fail trying to sub without a handler and catch the error', () => {
+    expect(() => {
+      stateMachine.throwErrors = true
+
+      stateMachine.sub('test')
+    }).toThrow(/Failed to subscribe to topic.*: .*/)
+
+    stateMachine.throwErrors = false
   })
 
   it('unsub from the default topic', () => {
@@ -85,7 +107,7 @@ describe('testing pretty-state-machine class', () => {
   it('fetch a topic entry with an existing value', () => {
     stateMachine.set('test', 'test')
 
-    const result = stateMachine.fetch('test', 'default')
+    const result = stateMachine.fetch('test', 'test')
 
     expect(result).toEqual({ test: 'test' })
   })
