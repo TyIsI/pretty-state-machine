@@ -1,5 +1,6 @@
 import { Debugger } from 'debug';
 import EventEmitter, { EventNames, EventListener } from 'eventemitter3';
+import { Dispatch, SetStateAction } from 'react';
 
 declare type psmType = EventNames<string | symbol>;
 declare type psmHandler<T extends psmType> = EventListener<string | symbol, T>;
@@ -112,6 +113,6 @@ declare class PrettyStateMachine {
  */
 declare const stateMachine: PrettyStateMachine;
 
-declare const useStateMachine: <V>(topic: psmType, defaultValue?: V) => any[];
+declare const useStateMachine: <V>(topic: psmType, defaultValue?: V) => [V, Dispatch<SetStateAction<V>>];
 
 export { PrettyStateMachine, stateMachine as prettyStateMachine, stateMachine, useStateMachine };
