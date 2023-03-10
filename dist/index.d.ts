@@ -112,4 +112,6 @@ declare class PrettyStateMachine {
  */
 declare const stateMachine: PrettyStateMachine;
 
-export { PrettyStateMachine, stateMachine as default, stateMachine as prettyStateMachine, stateMachine };
+declare const useStateMachine: <V>(topic: psmType, defaultValue?: V) => any[];
+
+export { PrettyStateMachine, stateMachine as prettyStateMachine, stateMachine, useStateMachine };
