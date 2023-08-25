@@ -2,10 +2,10 @@ import { copy } from 'copy-anything'
 import Debug, { type Debugger } from 'debug'
 import EventEmitter from 'eventemitter3'
 import {
-    type psmHandler,
-    type psmObject,
-    type psmStoreObject,
-    type psmType
+    type PSM_Handler,
+    type PSM_Object,
+    type PSM_StoreObject,
+    type PSM_Type
 } from './types'
 
 const debug = Debug('pretty-state-machine')
@@ -14,8 +14,8 @@ class PrettyStateMachine {
     name: string
     debug: Debugger
     consumers: EventEmitter
-    defaultTopic: psmType
-    store: psmStoreObject
+    defaultTopic: PSM_Type
+    store: PSM_StoreObject
     localStorageKey: string
     throwErrors = false
 
@@ -75,11 +75,11 @@ class PrettyStateMachine {
     /**
      * Delete a state
      *
-     * @param {psmType} topic
+     * @param {PSM_Type} topic
      *
      * @returns {void}
      */
-    delete(topic: psmType) {
+    delete(topic: PSM_Type) {
         /* TODO: fix test */
         /* istanbul ignore next */
         if (this.store[this.defaultTopic][topic] != null) {
@@ -98,12 +98,12 @@ class PrettyStateMachine {
     /**
      * Fetch a state as an object
      *
-     * @param {psmType} topic
+     * @param {PSM_Type} topic
      * @param {V} defaultVal
      *
      * @returns {object}
      */
-    fetch(topic: psmType, defaultVal?: psmObject | psmType): psmObject {
+    fetch(topic: PSM_Type, defaultVal?: PSM_Object | PSM_Type): PSM_Object {
         defaultVal = defaultVal || {}
 
         if (this.store[topic] != null) {
@@ -130,12 +130,12 @@ class PrettyStateMachine {
     /**
      * Get a state as a value
      *
-     * @param {psmType} topic
+     * @param {PSM_Type} topic
      * @param defaultVal
      *
      * @returns {V}
      */
-    get<V>(topic: psmType, defaultVal?: V): V {
+    get<V>(topic: PSM_Type, defaultVal?: V): V {
         /* TODO: fix test */
         /* istanbul ignore next */
         if (this.store[topic] != null) {
@@ -159,7 +159,7 @@ class PrettyStateMachine {
      * @param {string} topic
      * @param {unknown} value
      */
-    pub<V>(topic: psmType | V, value?: V) {
+    pub<V>(topic: PSM_Type | V, value?: V) {
         if (typeof topic !== 'string') {
             value = topic as V
             topic = this.defaultTopic
@@ -184,16 +184,16 @@ class PrettyStateMachine {
     /**
      * Set a state
      *
-     * @param {psmType} topic
+     * @param {PSM_Type} topic
      * @param value
      */
-    set<V>(topic: psmType | V, value?: V) {
+    set<V>(topic: PSM_Type | V, value?: V) {
         if (typeof topic !== 'string') {
             value = topic as V
             topic = this.defaultTopic
         }
 
-        let updateObj: psmObject = {}
+        let updateObj: PSM_Object = {}
 
         if (Array.isArray(value)) {
             if (topic != null && this.store[topic] == null) {
@@ -210,9 +210,9 @@ class PrettyStateMachine {
 
             for (const updateKey in value) {
                 if (
-                    ((this.store[topic] as psmObject)[updateKey] == null ||
+                    ((this.store[topic] as PSM_Object)[updateKey] == null ||
                         JSON.stringify(
-                            (this.store[topic] as psmObject)[updateKey]
+                            (this.store[topic] as PSM_Object)[updateKey]
                         ) !== JSON.stringify(value[updateKey])) &&
                     updateKey !== this.defaultTopic
                 ) {
@@ -227,7 +227,7 @@ class PrettyStateMachine {
 
         if (Object.keys(updateObj).length > 0) {
             this.store[this.defaultTopic] = {
-                ...(this.store[this.defaultTopic] as psmObject),
+                ...(this.store[this.defaultTopic] as PSM_Object),
                 ...updateObj
             }
 
@@ -246,12 +246,12 @@ class PrettyStateMachine {
     /**
      * Subscribe to a state
      *
-     * @param {psmType} topic
+     * @param {PSM_Type} topic
      * @param handler
      * @returns {EventEmitter}
      */
-    sub<F extends psmHandler<psmType>>(
-        topic: psmType | F,
+    sub<F extends PSM_Handler<PSM_Type>>(
+        topic: PSM_Type | F,
         handler?: F
     ): EventEmitter {
         if (typeof topic === 'function') {
@@ -278,12 +278,12 @@ class PrettyStateMachine {
     /**
      * Unsubscribe from a state
      *
-     * @param {psmType} topic
+     * @param {PSM_Type} topic
      * @param handler
      * @returns
      */
-    unsub<F extends psmHandler<psmType>>(
-        topic: psmType | F,
+    unsub<F extends PSM_Handler<PSM_Type>>(
+        topic: PSM_Type | F,
         handler?: F
     ): EventEmitter {
         if (typeof topic === 'function') {
@@ -298,12 +298,12 @@ class PrettyStateMachine {
     /**
      * Alias for sub
      *
-     * @param {psmType} topic
+     * @param {PSM_Type} topic
      * @param handler
      * @returns
      */
-    attach<F extends psmHandler<psmType>>(
-        topic: psmType | F,
+    attach<F extends PSM_Handler<PSM_Type>>(
+        topic: PSM_Type | F,
         handler?: F
     ): EventEmitter {
         return this.sub(topic, handler)
@@ -312,12 +312,12 @@ class PrettyStateMachine {
     /**
      * Alias for unsub
      *
-     * @param {psmType} topic
+     * @param {PSM_Type} topic
      * @param handler
      * @returns
      */
-    unattach<F extends psmHandler<psmType>>(
-        topic: psmType | F,
+    unattach<F extends PSM_Handler<PSM_Type>>(
+        topic: PSM_Type | F,
         handler?: F
     ): EventEmitter {
         return this.unsub(topic, handler)
@@ -326,12 +326,12 @@ class PrettyStateMachine {
     /**
      * Alias for unsub
      *
-     * @param {psmType} topic
+     * @param {PSM_Type} topic
      * @param handler
      * @returns
      */
-    detach<F extends psmHandler<psmType>>(
-        topic: psmType | F,
+    detach<F extends PSM_Handler<PSM_Type>>(
+        topic: PSM_Type | F,
         handler?: F
     ): EventEmitter {
         return this.unsub(topic, handler)
