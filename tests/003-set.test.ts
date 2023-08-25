@@ -1,55 +1,55 @@
 import { stateMachine } from '../src'
 
 describe('testing pretty-state-machine set methods', () => {
-  it('set a string', () => {
-    const testData = 'test'
+    it('set a string', () => {
+        const testData = 'test'
 
-    const testString = stateMachine.set('testString', testData)
+        const testString = stateMachine.set('testString', testData)
 
-    expect(testString).toEqual({ testString: testData })
-  })
+        expect(testString).toEqual({ testString: testData })
+    })
 
-  it('set a number', () => {
-    const testData = 1
+    it('set a number', () => {
+        const testData = 1
 
-    const testNumber = stateMachine.set('testNumber', testData)
+        const testNumber = stateMachine.set('testNumber', testData)
 
-    expect(testNumber).toEqual({ testNumber: testData })
-  })
+        expect(testNumber).toEqual({ testNumber: testData })
+    })
 
-  it('set a boolean', () => {
-    const testData = true
+    it('set a boolean', () => {
+        const testData = true
 
-    const testBoolean = stateMachine.set('testBoolean', testData)
+        const testBoolean = stateMachine.set('testBoolean', testData)
 
-    expect(testBoolean).toEqual({ testBoolean: testData })
-  })
+        expect(testBoolean).toEqual({ testBoolean: testData })
+    })
 
-  it('set an object', () => {
-    const testData = { test: 'test' }
+    it('set an object', () => {
+        const testData = { test: 'test' }
 
-    const testObj = stateMachine.set('testObj', testData)
+        const testObj = stateMachine.set('testObj', testData)
 
-    expect(testObj).toEqual(testData)
-  })
+        expect(testObj).toEqual(testData)
+    })
 
-  it('set an array', () => {
-    const testData = [1, 2, 3]
+    it('set an array', () => {
+        const testData = [1, 2, 3]
 
-    const testArray = stateMachine.set('testArray', testData)
+        const testArray = stateMachine.set('testArray', testData)
 
-    expect(testArray).toEqual({ testArray: testData })
-  })
+        expect(testArray).toEqual({ testArray: testData })
+    })
 
-  it('set a new state', () => {
-    const testData = { testState: 'testState' }
+    it('set a new state', () => {
+        const testData = { testState: 'testState' }
 
-    const testObj = stateMachine.set(testData)
+        const testObj = stateMachine.set(testData)
 
-    expect(testObj).toEqual(testData)
-  })
+        expect(testObj).toEqual(testData)
+    })
 })
 
 afterAll(() => {
-  stateMachine.shutdown()
+    stateMachine.shutdown()
 })
