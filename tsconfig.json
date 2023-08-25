@@ -1,11 +1,36 @@
 {
-  "compilerOptions": {
-    "target": "esnext",
-    "module": "amd",
-    "moduleResolution": "node",
-    "allowJs": true,
-    "strict": false,
-    "esModuleInterop": true,
-    "outDir": "./dist"
-  }
+    "compilerOptions": {
+        "jsx": "react",
+        "target": "esnext",
+        "module": "UMD",
+        "moduleResolution": "node",
+        "allowJs": true,
+        "strict": false,
+        "isolatedModules": true,
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "lib": ["es2020", "DOM"],
+        "skipLibCheck": true,
+        "sourceMap": true,
+        "outDir": "dist",
+        "declaration": true,
+        "baseUrl": ".",
+        "removeComments": true,
+        "downlevelIteration": true,
+        "strictNullChecks": true
+    },
+    "ts-node": {
+        "esm": true
+    },
+    "include": [
+        "src/*.ts",
+        "src/*.tsx",
+        "src/**/*.ts",
+        "src/**/*.tsx",
+        "tests/*.ts",
+        "tests/*.tsx",
+        "tests/**/*.ts",
+        "tests/**/*.tsx"
+    ],
+    "exclude": ["node_modules"]
 }
