@@ -14,17 +14,20 @@
     },
     "scripts": {
         "build": "tsup src/index.ts --format cjs,esm --dts --clean",
-        "watch": "yarn build -- --watch src",
+        "watch": "pnpm build -- --watch src",
+        "format": "prettier -w src/** tests/**",
         "lint": "eslint --fix src/** tests/**",
         "test": "jest",
-        "commit": "npx git-cz",
+        "commit": "npx git-cz@latest",
         "release": "npx standard-version",
         "postbuild": "git add dist && git commit -m \"chore: dist build\" || true",
-        "prebuild": "yarn test",
-        "prepublishOnly": "yarn build",
-        "prerelease": "yarn build",
+        "prebuild": "pnpm test",
+        "prepublishOnly": "pnpm build",
+        "prerelease": "pnpm build",
         "postrelease": "git push --follow-tags origin trunk && npm publish",
-        "pretest": "yarn lint"
+        "pretest": "pnpm lint",
+        "postlint": "pnpm format",
+        "preinstall": "npx only-allow pnpm"
     },
     "repository": {
         "type": "git",

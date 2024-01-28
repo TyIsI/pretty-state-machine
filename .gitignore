@@ -4,13 +4,6 @@
 .vscode/*
 !.vscode/settings.json
 
-!.yarn
-.yarn/*
-.yarn/**/
-.yarn/**/*
-!.yarn/releases/
-!.yarn/releases/*
-
 !dist
 dist/*
 !dist/index.*js
@@ -33,9 +26,8 @@ tests/*
 !.eslintrc.yml
 !.prettierrc.yml
 
-!.yarnrc.yml
 !package.json
-!yarn.lock
+!pnpm-lock.yaml
 
 !babel.config.js
 !jest.config.js
