@@ -12,8 +12,7 @@ plugins:
 extends:
     - eslint:recommended
     - plugin:@typescript-eslint/recommended
-    - standard
-    - standard-with-typescript
+    - eslint-config-love
     - prettier
 parser: '@typescript-eslint/parser'
 parserOptions:

@@ -7,5 +7,5 @@ indent_size = 4
 indent_style = space
 insert_final_newline = true
 trim_trailing_whitespace = true
-max_line_width = 60
-print_width = 50
+max_line_width = 120
+print_width = 120

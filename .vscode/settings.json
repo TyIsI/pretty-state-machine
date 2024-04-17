@@ -1,29 +1,24 @@
 {
     "editor.tabSize": 2,
     "editor.tabCompletion": "on",
-    "snyk.advanced.organization": "tyisi",
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.codeActionsOnSave": {
-        "source.fixAll.prettier": true
+        "source.fixAll.prettier": "explicit"
     },
     "[javascript]": {
         "editor.maxTokenizationLineLength": 2500,
         "editor.defaultFormatter": "esbenp.prettier-vscode",
         "editor.codeActionsOnSave": {
-            "source.fixAll.eslint": true,
-            "source.fixAll.prettier": true
+            "source.fixAll.eslint": "explicit",
+            "source.fixAll.prettier": "explicit"
         }
     },
     "[typescript]": {
         "editor.maxTokenizationLineLength": 2500,
         "editor.defaultFormatter": "esbenp.prettier-vscode",
         "editor.codeActionsOnSave": {
-            "source.fixAll.eslint": true,
-            "source.fixAll.prettier": true
+            "source.fixAll.eslint": "explicit",
+            "source.fixAll.prettier": "explicit"
         }
-    },
-    "search.exclude": {
-        "**/.yarn": true,
-        "**/.pnp.*": true
     }
 }

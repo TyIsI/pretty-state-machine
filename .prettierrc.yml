@@ -9,4 +9,4 @@ proseWrap: preserve
 htmlWhitespaceSensitivity: css
 embeddedLanguageFormatting: auto
 singleAttributePerLine: false
-printWidth: 80
+printWidth: 120
