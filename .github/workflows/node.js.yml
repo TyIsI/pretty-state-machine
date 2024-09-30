@@ -8,10 +8,10 @@ on:
     branches: [ "trunk" ]
   pull_request:
     branches: [ "trunk" ]
+  workflow_dispatch:
 
 jobs:
   build:
-
     runs-on: ubuntu-22.04
 
     strategy:
@@ -33,7 +33,6 @@ jobs:
         cache: 'pnpm'
 
     - run: pnpm install --frozen-lockfile
-    
     
     - run: pnpm build --if-present
     
